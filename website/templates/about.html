@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CloudDelay - Hakkında</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --light-bg: #f8fafc;
+            --dark-text: #1e293b;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light-bg);
+            padding-top: 76px;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .floating-icon {
+            position: absolute;
+            color: rgba(255,255,255,0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-icon:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .floating-icon:nth-child(2) { top: 60%; right: 15%; animation-delay: 2s; }
+        .floating-icon:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .about-section {
+            padding: 60px 0;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin: 0;
+        }
+
+        .section-description {
+            color: #64748b;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+            border-color: #bae6fd;
+            transform: translateX(5px);
+        }
+
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .tech-category {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .tech-category-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .tech-category-title i {
+            margin-right: 0.5rem;
+        }
+
+        .tech-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tech-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            color: #64748b;
+        }
+
+        .tech-item:last-child {
+            border-bottom: none;
+        }
+
+        .tech-item strong {
+            color: var(--dark-text);
+        }
+
+        .developer-card {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 1px solid #bae6fd;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .developer-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .developer-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .developer-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .timeline {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .timeline-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .timeline-content h6 {
+            color: var(--dark-text);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content p {
+            color: #64748b;
+            margin: 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .info-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+            }
+            
+            .page-header {
+                padding: 60px 0;
+            }
+
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .developer-avatar {
+                width: 100px;
+                height: 100px;
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fas fa-plane me-2"></i>CloudDelay
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Ana Sayfa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/predict">Tahmin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/analysis">Analiz</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/sql_queries">SQL Sorguları</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/about">Hakkında</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="floating-elements">
+            <i class="fas fa-info-circle floating-icon fa-3x"></i>
+            <i class="fas fa-users floating-icon fa-2x"></i>
+            <i class="fas fa-rocket floating-icon fa-4x"></i>
+        </div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center page-header-content">
+                    <h1 class="display-4 fw-bold mb-3">
+                        <i class="fas fa-info-circle me-3"></i>Proje Hakkında
+                    </h1>
+                    <p class="lead mb-0">
+                        CloudDelay projesi, modern veri mühendisliği teknikleriyle geliştirilmiş kapsamlı bir uçuş gecikme tahmin sistemidir
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <!-- Project Overview -->
+            <div class="info-card">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-plane"></i>
+                    </div>
+                    <h3 class="section-title">CloudDelay Projesi Hakkında</h3>
+                </div>
+                <p class="section-description">
+                    CloudDelay, havacılık sektöründe yaşanan gecikme sorunlarına modern bir çözüm sunmak amacıyla geliştirilmiş kapsamlı bir veri mühendisliği projesidir. Amadeus API'den elde edilen gerçek zamanlı uçuş verileri, AWS cloud altyapısı kullanılarak işlenir ve makine öğrenmesi algoritmaları ile analiz edilir. Proje, yolculara seyahat planlaması konusunda önceden bilgi sağlarken, havayolu şirketlerine operasyonel iyileştirmeler için değerli içgörüler sunar.
+                </p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number">95%</span>
+                        <div class="stat-label">Tahmin Doğruluğu</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">1000+</span>
+                        <div class="stat-label">Analiz Edilen Veri</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">6</span>
+                        <div class="stat-label">SQL Analizi</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">24/7</span>
+                        <div class="stat-label">Kesintisiz Hizmet</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Goals -->
+            <div class="info-card">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3 class="section-title">Projenin Amaçları</h3>
+                </div>
+                <p class="section-description">
+                    Bu proje, havacılık sektöründeki veri odaklı karar verme süreçlerini desteklemek ve yolcu deneyimini iyileştirmek amacıyla tasarlanmıştır.
+                </p>
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-api"></i>
+                        </div>
+                        <div>
+                            <strong>Amadeus API Entegrasyonu:</strong> Dünya'nın önde gelen seyahat teknoloji şirketlerinden biri olan Amadeus'un Flight Delay Prediction API'sini kullanarak gerçek zamanlı ve güvenilir gecikme tahminleri almak.
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <div>
+                            <strong>AWS Cloud Altyapısı:</strong> Amazon Web Services'in güçlü cloud hizmetlerini (S3, Glue, Athena) kullanarak ölçeklenebilir bir ETL (Extract, Transform, Load) süreci oluşturmak ve büyük veri setlerini verimli şekilde işlemek.
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div>
+                            <strong>Veri Analitiği:</strong> SQL sorguları ve görselleştirme araçları (Tableau) ile derinlemesine analizler yaparak gecikme paternlerini keşfetmek ve operasyonel içgörüler sağlamak.
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <div>
+                            <strong>Kullanıcı Dostu Arayüz:</strong> Modern web teknolojileri kullanarak sezgisel ve responsive bir web uygulaması geliştirmek, böylece kullanıcıların kolayca gecikme tahminlerine erişebilmesini sağlamak.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Technologies -->
+            <div class="info-card">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3 class="section-title">Kullanılan Teknolojiler</h3>
+                </div>
+                <p class="section-description">
+                    CloudDelay projesi, modern veri mühendisliği ve web geliştirme teknolojilerinin entegrasyonu ile geliştirilmiştir.
+                </p>
+                
+                <div class="tech-grid">
+                    <div class="tech-category">
+                        <h6 class="tech-category-title">
+                            <i class="fas fa-code"></i>Backend & Veri İşleme
+                        </h6>
+                        <ul class="tech-list">
+                            <li class="tech-item"><strong>Python:</strong> Ana programlama dili, veri işleme ve API geliştirme</li>
+                            <li class="tech-item"><strong>Flask:</strong> Hafif ve esnek web framework</li>
+                            <li class="tech-item"><strong>Pandas:</strong> Veri manipülasyonu ve analizi</li>
+                            <li class="tech-item"><strong>Jinja2:</strong> Template engine for dynamic web pages</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-category">
+                        <h6 class="tech-category-title">
+                            <i class="fas fa-cloud"></i>Cloud & Altyapı
+                        </h6>
+                        <ul class="tech-list">
+                            <li class="tech-item"><strong>AWS S3:</strong> Büyük veri depolama ve yönetimi</li>
+                            <li class="tech-item"><strong>AWS Glue:</strong> ETL işlemleri ve veri transformasyonu</li>
+                            <li class="tech-item"><strong>AWS Athena:</strong> Serverless SQL sorgu motoru</li>
+                            <li class="tech-item"><strong>AWS IAM:</strong> Güvenlik ve erişim kontrolü</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-category">
+                        <h6 class="tech-category-title">
+                            <i class="fas fa-palette"></i>Frontend & UI/UX
+                        </h6>
+                        <ul class="tech-list">
+                            <li class="tech-item"><strong>Bootstrap 5:</strong> Responsive ve modern UI framework</li>
+                            <li class="tech-item"><strong>Font Awesome:</strong> İkon kütüphanesi</li>
+                            <li class="tech-item"><strong>JavaScript:</strong> İnteraktif kullanıcı arayüzü ve dinamik içerik</li>
+                            <li class="tech-item"><strong>HTML5 & CSS3:</strong> Modern web standartları</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-category">
+                        <h6 class="tech-category-title">
+                            <i class="fas fa-chart-bar"></i>Veri Görselleştirme
+                        </h6>
+                        <ul class="tech-list">
+                            <li class="tech-item"><strong>Tableau:</strong> İnteraktif dashboard'lar ve görselleştirmeler</li>
+                            <li class="tech-item"><strong>Prism.js:</strong> Kod syntax highlighting</li>
+                            <li class="tech-item"><strong>Chart.js:</strong> Web tabanlı grafikler</li>
+                            <li class="tech-item"><strong>CSS Animations:</strong> Kullanıcı deneyimi iyileştirmeleri</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Timeline -->
+            <div class="info-card">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 class="section-title">Proje Geliştirme Süreci</h3>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h6>Planlama ve Araştırma</h6>
+                            <p>Havacılık sektöründeki gecikme problemlerinin analizi, API araştırması ve teknoloji stack'in belirlenmesi. Amadeus API dokumentasyonunun incelenmesi ve AWS servislerinin planlanması.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h6>Veri Toplama ve ETL</h6>
+                            <p>Amadeus API'den veri çekme script'lerinin yazılması, AWS S3'te veri depolama yapısının oluşturulması ve AWS Glue ile ETL pipeline'ının kurulması.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h6>Veri Analizi ve SQL</h6>
+                            <p>AWS Athena ile SQL sorgularının yazılması, Tableau dashboard'larının tasarlanması ve veri kalitesi kontrollerinin yapılması.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h6>Web Uygulaması Geliştirme</h6>
+                            <p>Flask web framework'ü ile backend geliştirme, Bootstrap ile responsive frontend tasarımı ve kullanıcı arayüzünün optimize edilmesi.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h6>Test ve Deployment</h6>
+                            <p>Sistem testleri, performans optimizasyonları ve son kullanıcı testlerinin gerçekleştirilmesi. Dokümantasyon ve proje sunumunun hazırlanması.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Developer Info -->
+            <div class="info-card">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3 class="section-title">Geliştirici</h3>
+                </div>
+                <div class="developer-card">
+                    <div class="developer-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h4 class="developer-name">Esra Koç</h4>
+                    <p class="text-muted mb-3">
+                        Bu proje, veri mühendisliği alanındaki bilgi ve becerileri göstermek amacıyla bir bitirme projesi kapsamında geliştirilmiştir. 
+                        Modern cloud teknolojileri, veri analizi ve web geliştirme konularında kapsamlı bir deneyim sunmaktadır.
+                    </p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Uzmanlık Alanları:</h6>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="fas fa-check text-success me-2"></i>Veri Mühendisliği</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Cloud Computing (AWS)</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Python Programlama</li>
+                                <li><i class="fas fa-check text-success me-2"></i>SQL ve Veri Analizi</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Kullanılan Teknolojiler:</h6>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="fas fa-code text-info me-2"></i>Flask & Python</li>
+                                <li><i class="fas fa-cloud text-warning me-2"></i>AWS Servisleri</li>
+                                <li><i class="fas fa-chart-bar text-success me-2"></i>Tableau</li>
+                                <li><i class="fas fa-palette text-danger me-2"></i>Bootstrap & CSS</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Future Improvements -->
+            <div class="info-card">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-road"></i>
+                    </div>
+                    <h3 class="section-title">Gelecek Geliştirmeler</h3>
+                </div>
+                <p class="section-description">
+                    CloudDelay projesi sürekli geliştirilmekte olup, gelecekte aşağıdaki özellikler eklenmeyi planlanmaktadır:
+                </p>
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div>
+                            <strong>Makine Öğrenmesi Modelleri:</strong> Daha gelişmiş tahmin algoritmaları ve yapay zeka modellerinin entegrasyonu ile tahmin doğruluğunun artırılması.
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div>
+                            <strong>Mobil Uygulama:</strong> iOS ve Android platformları için native mobil uygulama geliştirilerek kullanıcı erişiminin artırılması.
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div>
+                            <strong>Bildirim Sistemi:</strong> E-posta ve SMS ile gerçek zamanlı gecikme bildirimleri ve proaktif uyarı sistemi.
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div>
+                            <strong>Çoklu Dil Desteği:</strong> İngilizce, Almanca ve diğer dillerde hizmet vererek uluslararası kullanıcı tabanının genişletilmesi.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.backgroundColor = 'rgba(33, 37, 41, 0.95)';
+                navbar.style.backdropFilter = 'blur(10px)';
+            } else {
+                navbar.style.backgroundColor = '';
+                navbar.style.backdropFilter = '';
+            }
+        });
+
+        // Card animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.info-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = `all 0.6s ease ${index * 0.1}s`;
+                observer.observe(card);
+            });
+
+            // Stats counter animation
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach(stat => {
+                const originalText = stat.textContent;
+                const isNumber = !isNaN(originalText.replace(/[^0-9]/g, ''));
+                
+                if (isNumber) {
+                    const target = parseInt(originalText.replace(/[^0-9]/g, ''));
+                    let current = 0;
+                    const increment = target / 50;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            stat.textContent = originalText;
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = Math.floor(current) + originalText.replace(/[0-9]/g, '').replace(/[0-9]/g, '');
+                        }
+                    }, 40);
+                }
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

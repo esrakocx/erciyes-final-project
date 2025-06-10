@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CloudDelay - Veri Analizleri</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --light-bg: #f8fafc;
+            --dark-text: #1e293b;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light-bg);
+            padding-top: 76px;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .floating-icon {
+            position: absolute;
+            color: rgba(255,255,255,0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-icon:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .floating-icon:nth-child(2) { top: 60%; right: 15%; animation-delay: 2s; }
+        .floating-icon:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .analysis-section {
+            padding: 60px 0;
+        }
+
+        .analysis-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 4rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .analysis-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .chart-container {
+            padding: 2rem;
+            border-radius: 20px 0 0 20px;
+            background: #fafbfc;
+        }
+
+        .chart-container.right {
+            border-radius: 0 20px 20px 0;
+        }
+
+        .info-container {
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .analysis-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .analysis-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+        }
+
+        .analysis-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin: 0;
+        }
+
+        .chart-type-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .analysis-description {
+            color: #64748b;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .analysis-insights {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .insight-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .tableau-viz {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .stats-overview {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 15px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .analysis-card {
+                margin-bottom: 3rem;
+            }
+            
+            .chart-container,
+            .info-container {
+                padding: 1.5rem;
+            }
+            
+            .chart-container {
+                border-radius: 20px 20px 0 0;
+            }
+            
+            .chart-container.right {
+                border-radius: 20px 20px 0 0;
+            }
+            
+            .analysis-title {
+                font-size: 1.3rem;
+            }
+            
+            .page-header {
+                padding: 60px 0;
+            }
+        }
+
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            margin: 4rem 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fas fa-plane me-2"></i>CloudDelay
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Ana Sayfa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/predict">Tahmin</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/analysis">Analiz</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/sql_queries">SQL Sorguları</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">Hakkında</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="floating-elements">
+            <i class="fas fa-chart-bar floating-icon fa-3x"></i>
+            <i class="fas fa-chart-line floating-icon fa-2x"></i>
+            <i class="fas fa-chart-pie floating-icon fa-4x"></i>
+        </div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center page-header-content">
+                    <h1 class="display-4 fw-bold mb-3">
+                        <i class="fas fa-chart-line me-3"></i>Veri Analizleri
+                    </h1>
+                    <p class="lead mb-0">
+                        Uçuş gecikme verilerinden elde edilen detaylı analizler ve görselleştirmeler
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Overview -->
+    <section class="analysis-section">
+        <div class="container">
+            <div class="stats-overview">
+                <h3 class="text-center mb-4 fw-bold">Analiz Özeti</h3>
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <span class="stat-number">6</span>
+                        <div class="stat-label">Farklı Analiz</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">1000+</span>
+                        <div class="stat-label">Analiz Edilen Veri</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">5</span>
+                        <div class="stat-label">Grafik Türü</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">100%</span>
+                        <div class="stat-label">Gerçek Veri</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis 1: Route Based Delay -->
+            <div class="analysis-card">
+                <div class="row g-0">
+                    <div class="col-lg-6">
+                        <div class="chart-container">
+                            <div class='tableauPlaceholder tableau-viz' id='viz1' style='position: relative; width: 100%'>
+                                <noscript><a href='#'><img alt='Sheet 1' src='https://public.tableau.com/static/images/Bo/Book1_17488106600180/Sheet1/1_rss.png' style='border: none' /></a></noscript>
+                                <object class='tableauViz' style='display:none;'>
+                                    <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                                    <param name='embed_code_version' value='3' />
+                                    <param name='site_root' value='' />
+                                    <param name='name' value='Book1_17488106600180/Sheet1' />
+                                    <param name='language' value='en-US' />
+                                </object>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="info-container">
+                            <div class="analysis-header">
+                                <div class="analysis-icon">
+                                    <i class="fas fa-route"></i>
+                                </div>
+                                <h4 class="analysis-title">Rota Bazlı Gecikme Analizi</h4>
+                            </div>
+                            <div class="chart-type-badge">
+                                <i class="fas fa-chart-bar me-2"></i>Yatay Bar Grafiği
+                            </div>
+                            <p class="analysis-description">
+                                Bu analiz, farklı uçuş rotalarına ait ortalama gecikme olasılıklarını karşılaştırmak amacıyla oluşturulmuştur. Y ekseninde kalkış-varış havaalanı kombinasyonları (örneğin, IST-ESB) yer alırken, X ekseninde bu rotalara ait gecikme yüzdesi gösterilir.
+                            </p>
+                            <div class="analysis-insights">
+                                <div class="insight-title">📈 Önemli Bulgular</div>
+                                <p class="mb-0">Uçuş güzergahları arasındaki farklar belirginleştirilerek, sık gecikme yaşanan rotaların tespiti sağlanır. Bu bilgiler, havayolu şirketlerinin uçuş planlamasında iyileştirme yapmasına yardımcı olabilir.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <!-- Analysis 2: Day of Week -->
+            <div class="analysis-card">
+                <div class="row g-0">
+                    <div class="col-lg-6 order-lg-2">
+                        <div class="chart-container right">
+                            <div class='tableauPlaceholder tableau-viz' id='viz2' style='position: relative; width: 100%'>
+                                <noscript><a href='#'><img alt='Sheet 2 ' src='https://public.tableau.com/static/images/Bo/Book1_17488106600180/Sheet2/1_rss.png' style='border: none' /></a></noscript>
+                                <object class='tableauViz' style='display:none;'>
+                                    <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                                    <param name='embed_code_version' value='3' />
+                                    <param name='site_root' value='' />
+                                    <param name='name' value='Book1_17488106600180/Sheet2' />
+                                    <param name='tabs' value='no' />
+                                    <param name='toolbar' value='yes' />
+                                    <param name='static_image' value='https://public.tableau.com/static/images/Bo/Book1_17488106600180/Sheet2/1.png' />
+                                    <param name='animate_transition' value='yes' />
+                                    <param name='display_static_image' value='yes' />
+                                    <param name='display_spinner' value='yes' />
+                                    <param name='display_overlay' value='yes' />
+                                    <param name='display_count' value='yes' />
+                                    <param name='language' value='en-US' />
+                                </object>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 order-lg-1">
+                        <div class="info-container">
+                            <div class="analysis-header">
+                                <div class="analysis-icon">
+                                    <i class="fas fa-calendar-week"></i>
+                                </div>
+                                <h4 class="analysis-title">Hafta Günlerine Göre Gecikme</h4>
+                            </div>
+                            <div class="chart-type-badge">
+                                <i class="fas fa-chart-line me-2"></i>Çizgi Grafiği
+                            </div>
+                            <p class="analysis-description">
+                                Bu analiz, haftanın farklı günlerinde gerçekleşen uçuşların ortalama gecikme olasılıklarını incelemek amacıyla oluşturulmuştur. X ekseninde haftanın günleri sayısal olarak temsil edilmiştir (0 = Pazartesi, 6 = Pazar), Y ekseni ise gecikme yüzdesini gösterir.
+                            </p>
+                            <div class="analysis-insights">
+                                <div class="insight-title">📊 Analiz Sonuçları</div>
+                                <p class="mb-0">Grafik sayesinde hafta içi ve hafta sonu arasındaki operasyonel farklılıklar gözlemlenebilir. Cuma veya Pazar günleri gibi yoğunluk yaşanan zaman dilimlerinde gecikme oranlarında artış tespit edilmiştir.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <!-- Analysis 3: Aircraft Model -->
+            <div class="analysis-card">
+                <div class="row g-0">
+                    <div class="col-lg-6">
+                        <div class="chart-container">
+                            <div class='tableauPlaceholder tableau-viz' id='viz3' style='position: relative; width: 100%'>
+                                <noscript><a href='#'><img alt='Sheet 3' src='https://public.tableau.com/static/images/Bo/Book1_17488106600180/Sheet3/1_rss.png' style='border: none' /></a></noscript>
+                                <object class='tableauViz' style='display:none;'>
+                                    <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                                    <param name='embed_code_version' value='3' />
+                                    <param name='site_root' value='' />
+                                    <param name='name' value='Book1_17488106600180/Sheet3' />
+                                    <param name='language' value='en-US' />
+                                </object>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="info-container">
+                            <div class="analysis-header">
+                                <div class="analysis-icon">
+                                    <i class="fas fa-plane"></i>
+                                </div>
+                                <h4 class="analysis-title">Uçak Modeline Göre Gecikme</h4>
+                            </div>
+                            <div class="chart-type-badge">
+                                <i class="fas fa-chart-bar me-2"></i>Yatay Bar Grafiği
+                            </div>
+                            <p class="analysis-description">
+                                Bu görselleştirme, uçuşlarda kullanılan farklı uçak modellerine göre ortalama gecikme olasılıklarını sunmaktadır. X ekseninde gecikme yüzdeleri, Y ekseninde uçak modeli kodları (örneğin, 321, 737, 777) yer alır.
+                            </p>
+                            <div class="analysis-insights">
+                                <div class="insight-title">✈️ Performans Karşılaştırması</div>
+                                <p class="mb-0">Bazı uçak modelleri, havalimanı altyapısı ya da bakım süreçleri nedeniyle daha fazla gecikme yaşatabilir. Bu analiz, filodaki uçak tiplerinin operasyonel etkilerini değerlendirmeye yardımcı olur.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <!-- Analysis 4: Arrival Airport -->
+<div class="analysis-card">
+    <div class="row g-0">
+        <div class="col-lg-6 order-lg-2">
+            <div class="chart-container right">
+                <div class='tableauPlaceholder tableau-viz' id='viz4' style='position: relative; width: 100%'>
+                    <noscript><a href='#'><img alt='Sheet 4' src='https://public.tableau.com/static/images/Bo/Book1_17488106600180/Sheet4/1_rss.png' style='border: none' /></a></noscript>
+                    <object class='tableauViz' style='display:none;'>
+                        <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                        <param name='embed_code_version' value='3' />
+                        <param name='site_root' value='' />
+                        <param name='name' value='Book1_17488106600180/Sheet4' />
+                        <param name='language' value='en-US' />
+                        <param name='tabs' value='no' />
+                        <param name='toolbar' value='yes' />
+                        <param name='static_image' value='https://public.tableau.com/static/images/Bo/Book1_17488106600180/Sheet4/1.png' />
+                        <param name='animate_transition' value='yes' />
+                        <param name='display_static_image' value='yes' />
+                        <param name='display_spinner' value='yes' />
+                        <param name='display_overlay' value='yes' />
+                        <param name='display_count' value='yes' />
+                    </object>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 order-lg-1">
+            <div class="info-container">
+                <div class="analysis-header">
+                    <div class="analysis-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h4 class="analysis-title">Varış Havalimanına Göre Gecikme</h4>
+                </div>
+                <div class="chart-type-badge">
+                    <i class="fas fa-chart-bar me-2"></i>Yatay Bar Grafiği
+                </div>
+                <p class="analysis-description">
+                    Bu analiz, uçuşların varış yaptığı havalimanlarına göre ortalama gecikme olasılıklarını karşılaştırmak için hazırlanmıştır. Grafik üzerinde her bir havalimanı gecikme oranlarıyla birlikte gösterilmiştir.
+                </p>
+                <div class="analysis-insights">
+                    <div class="insight-title">🏢 Havalimanı Performansı</div>
+                    <p class="mb-0">Yoğunluk yaşanan varış noktaları, pist kapasitesi, trafik kontrolü gibi faktörler nedeniyle gecikmelere neden olabilir. Bu analiz, havalimanı bazında performans karşılaştırması yapılmasını sağlar.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-divider"></div>
+            <!-- Analysis 5: Hourly Delay -->
+            <div class="analysis-card">
+                <div class="row g-0">
+                    <div class="col-lg-6">
+                        <div class="chart-container">
+                            <div class='tableauPlaceholder tableau-viz' id='viz5' style='position: relative; width: 100%'>
+                                <noscript><a href='#'><img alt='Sheet 1' src='https://public.tableau.com/static/images/Bo/Book2_17490704114380/Sheet1/1_rss.png' style='border: none' /></a></noscript>
+                                <object class='tableauViz' style='display:none;'>
+                                    <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                                    <param name='embed_code_version' value='3' />
+                                    <param name='site_root' value='' />
+                                    <param name='name' value='Book2_17490704114380/Sheet1' />
+                                    <param name='language' value='en-US' />
+                                </object>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="info-container">
+                            <div class="analysis-header">
+                                <div class="analysis-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <h4 class="analysis-title">Saatlik Gecikme Dağılımı</h4>
+                            </div>
+                            <div class="chart-type-badge">
+                                <i class="fas fa-chart-line me-2"></i>Çizgi Grafiği
+                            </div>
+                            <p class="analysis-description">
+                                Uçuşların gün içinde saatlik zaman dilimlerine göre ortalama gecikme olasılıklarını gösteren bu analizde, X ekseni 0–23 saat aralığını temsil eder. Y ekseninde ise o saat diliminde gerçekleşen ortalama gecikme yüzdeleri yer alır.
+                            </p>
+                            <div class="analysis-insights">
+                                <div class="insight-title">⏰ Zaman Analizi</div>
+                                <p class="mb-0">Özellikle sabah ve akşam saatlerindeki artan trafik, operasyonel darboğazlara neden olabilir. Bu analiz sayesinde, havalimanlarında pik saatler belirlenerek kaynak dağılımı optimize edilebilir.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <!-- Analysis 6: Heatmap -->
+            <div class="analysis-card">
+                <div class="row g-0">
+                    <div class="col-lg-6 order-lg-2">
+                        <div class="chart-container right">
+                            <div class='tableauPlaceholder tableau-viz' id='viz6' style='position: relative; width: 100%'>
+                                <noscript><a href='#'><img alt='Sheet 2' src='https://public.tableau.com/static/images/Bo/Book2_17490704114380/Sheet2/1_rss.png' style='border: none' /></a></noscript>
+                                <object class='tableauViz' style='display:none;'>
+                                    <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                                    <param name='embed_code_version' value='3' />
+                                    <param name='site_root' value='' />
+                                    <param name='name' value='Book2_17490704114380/Sheet2' />
+                                    <param name='language' value='en-US' />
+                                </object>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 order-lg-1">
+                        <div class="info-container">
+                            <div class="analysis-header">
+                                <div class="analysis-icon">
+                                    <i class="fas fa-th"></i>
+                                </div>
+                                <h4 class="analysis-title">Gecikme Sınıfı Isı Haritası</h4>
+                            </div>
+                            <div class="chart-type-badge">
+                                <i class="fas fa-fire me-2"></i>Heatmap (Isı Haritası)
+                            </div>
+                            <p class="analysis-description">
+                                Bu görselleştirme, gecikme sınıfları (örneğin, 30 dakikadan az, 30-60 dakika arası) ile kalkış saatleri arasındaki ilişkiyi renk yoğunlukları ile sunar. X ekseni saat dilimlerini, Y ekseni ise gecikme sınıflarını temsil eder.
+                            </p>
+                            <div class="analysis-insights">
+                                <div class="insight-title">🎯 Derinlemesine Analiz</div>
+                                <p class="mb-0">Renk yoğunluğu, belirli saatlerde belirli gecikme sınıflarının sıklığını göstermektedir. Böylece hem zaman hem de kategori bazlı analiz yapılabilir. Bu sayede günün hangi saatinde hangi tür gecikmelerin daha sık yaşandığı net olarak gözlemlenir.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Tableau JS -->
+    <script type='text/javascript'>
+        var vizIds = [
+            'viz1', 'viz2', 'viz3', 'viz4', 'viz5', 'viz6'
+        ];
+        
+        vizIds.forEach(function(id) {
+            var divElement = document.getElementById(id);
+            if (divElement) {
+                var vizElement = divElement.getElementsByTagName('object')[0];
+                if (vizElement) {
+                    vizElement.style.width = '100%';
+                    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+                    var scriptElement = document.createElement('script');
+                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+                    vizElement.parentNode.insertBefore(scriptElement, vizElement);
+                }
+            }
+        });
+
+        // Responsive handling
+        window.addEventListener('resize', function() {
+            vizIds.forEach(function(id) {
+                var divElement = document.getElementById(id);
+                if (divElement) {
+                    var vizElement = divElement.getElementsByTagName('object')[0];
+                    if (vizElement) {
+                        vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
