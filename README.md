@@ -93,8 +93,6 @@ cloud-delay/
 ## 👩‍💻 Geliştirici
 
 **Esra Koç**  
-📧 [Email adresiniz]  
-🔗 [LinkedIn / GitHub adresiniz]  
 
 ---
 
@@ -105,7 +103,7 @@ cloud-delay/
   
 ---
 
-### Projeye Ait Görseller
+## Projeye Ait Görseller
 <img width="1710" alt="anasayfa (1)" src="https://github.com/user-attachments/assets/f1662394-aad3-44ac-8710-1b1200b08528" />
 <img width="1416" alt="gecikme_tahmini (1)" src="https://github.com/user-attachments/assets/f7bb2168-728e-4518-bd03-6d09c9c18e8f" />
 <img width="949" alt="tahmin (1)" src="https://github.com/user-attachments/assets/82b70dc2-5323-4539-84a1-2b8b83bf1566" />
