@@ -97,7 +97,6 @@ cloud-delay/
 🔗 [LinkedIn / GitHub adresiniz]  
 
 ---
-<img width="1541" alt="veri_analizi (1)" src="https://github.com/user-attachments/assets/a4cb9273-e459-4742-b503-4e9936d9892c" />
 
 ## 📚 Referanslar
 
@@ -106,9 +105,12 @@ cloud-delay/
   
 ---
 
-### Projeye Ait Görseller <img width="1710" alt="anasayfa (1)" src="https://github.com/user-attachments/assets/f1662394-aad3-44ac-8710-1b1200b08528" /><img width="1416" alt="gecikme_tahmini (1)" src="https://github.com/user-attachments/assets/f7bb2168-728e-4518-bd03-6d09c9c18e8f" />
-
-<img width="1487" alt="sql_sayfasi (1)" src="https://github.com/user-attachments/assets/8dd9a3ad-8b25-41e3-b8ef-52e1c24cc1c7" /><img width="949" alt="tahmin (1)" src="https://github.com/user-attachments/assets/82b70dc2-5323-4539-84a1-2b8b83bf1566" />
+### Projeye Ait Görseller
+<img width="1710" alt="anasayfa (1)" src="https://github.com/user-attachments/assets/f1662394-aad3-44ac-8710-1b1200b08528" />
+<img width="1416" alt="gecikme_tahmini (1)" src="https://github.com/user-attachments/assets/f7bb2168-728e-4518-bd03-6d09c9c18e8f" />
+<img width="949" alt="tahmin (1)" src="https://github.com/user-attachments/assets/82b70dc2-5323-4539-84a1-2b8b83bf1566" />
+<img width="1487" alt="sql_sayfasi (1)" src="https://github.com/user-attachments/assets/8dd9a3ad-8b25-41e3-b8ef-52e1c24cc1c7" />
+<img width="1541" alt="veri_analizi (1)" src="https://github.com/user-attachments/assets/a4cb9273-e459-4742-b503-4e9936d9892c" />
 <img width="1399" alt="sql_ornek (1)" src="https://github.com/user-attachments/assets/4d189df7-a864-4a28-b834-106844493166" />
 <img width="1415" alt="gorsel_ornek (1)" src="https://github.com/user-attachments/assets/65c5e3d8-8c37-499c-94bc-cfb7dfaeb6fa" />
 
